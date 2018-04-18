@@ -87,6 +87,8 @@ bot.dialog('WeatherDialog',
 			.then((response) => {
 				if (response.data.status === 'ZERO_RESULTS') {
 					throw new Error('unable to find the address');
+				} else if(response.data.status === 'OVER_QUERY_LIMIT'){
+					throw new Error('exceeded request limit');
 				}
 				let lat = response.data.results[0].geometry.location.lat;
 				let lng = response.data.results[0].geometry.location.lng;
@@ -106,7 +108,7 @@ bot.dialog('WeatherDialog',
 				if (e.code === 'ENOTFOUND') {
 					session.send('unable to connect to the API servers');
 				} else {
-					console.log(e.message);
+					session.send(e.message);
 				}
 			});
 		session.endDialog();
