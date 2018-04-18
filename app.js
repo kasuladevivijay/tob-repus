@@ -4,20 +4,20 @@ A simple Language Understanding (LUIS) bot for the Microsoft Bot Framework.
 
 var restify = require('restify');
 var builder = require('botbuilder');
-var botbuilder_azure = require("botbuilder-azure");
+var botbuilder_azure = require('botbuilder-azure');
 var axios = require('axios');
 
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
-    console.log('%s listening to %s', server.name, server.url);
+	console.log('%s listening to %s', server.name, server.url);
 });
 
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword,
-    openIdMetadata: process.env.BotOpenIdMetadata
+	appId: process.env.MicrosoftAppId,
+	appPassword: process.env.MicrosoftAppPassword,
+	openIdMetadata: process.env.BotOpenIdMetadata
 });
 
 // Listen for messages from users 
@@ -32,14 +32,14 @@ server.post('/api/messages', connector.listen());
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
 var tableStorage = new botbuilder_azure.AzureBotStorage({
-    gzipData: false
+	gzipData: false
 }, azureTableClient);
 
 // Create your bot with a function to receive messages from the user
 // This default message handler is invoked if the user's utterance doesn't
 // match any intents handled by other dialogs.
 var bot = new builder.UniversalBot(connector, function (session, args) {
-    session.send('You reached the default message handler. You said \'%s\'.', session.message.text);
+	session.send('You reached the default message handler. You said \'%s\'.', session.message.text);
 });
 
 bot.set('storage', tableStorage);
@@ -62,63 +62,63 @@ bot.recognizer(recognizer);
 
 
 bot.dialog('GreetingDialog',
-    (session) => {
-        session.send('You reached the Greeting intent. You said \'%s\'.', session.message.text);
-        session.endDialog();
-    }
+	(session) => {
+		session.send('You reached the Greeting intent. You said \'%s\'.', session.message.text);
+		session.endDialog();
+	}
 ).triggerAction({
-    matches: 'Greeting'
+	matches: 'Greeting'
 });
 
 bot.dialog('HelpDialog',
-    (session) => {
-        session.send('You reached the Help intent. You said \'%s\'.', session.message.text);
-        session.endDialog();
-    }
+	(session) => {
+		session.send('You reached the Help intent. You said \'%s\'.', session.message.text);
+		session.endDialog();
+	}
 ).triggerAction({
-    matches: 'Help'
+	matches: 'Help'
 });
 
 bot.dialog('WeatherDialog',
-    (session, args) => {
-        const city = args.intent.entities[0].entity;
-        const geocodeUrl = `http://maps.googleapis.com/maps/api/geocode/json?address=${city}`;
-        axios.get(geocodeUrl)
-            .then((response) => {
-                if (response.data.status === 'ZERO_RESULTS') {
-                    throw new Error('unable to find the address');
-                }
-                let lat = response.data.results[0].geometry.location.lat;
-                let lng = response.data.results[0].geometry.location.lng;
-                const weatherUrl = `https://api.darksky.net/forecast/338f91d839d33c71c80184854527c2eb/${lat},${lng}`
-                session.send(`Location: ${response.data.results[0].formatted_address}`);
-                return axios.get(weatherUrl);
-            })
-            .then((response) => {
-                // console.log(JSON.stringify({
-                //     temperature: response.data.currently.temperature,
-                //     feelsLike: response.data.currently.apparentTemperature
-                // }, '', 4));
-                session.send(`Temperature is ${response.data.currently.temperature} but 
-                                feels like ${response.data.currently.apparentTemperature}`)
-            })
-            .catch((e) => {
-                if (e.code === 'ENOTFOUND') {
-                    session.send('unable to connect to the API servers');
-                } else {
-                    console.log(e.message);
-                }
-            });
-        session.endDialog();
-    }).triggerAction({
-    matches: 'Weather.GetForecast'
+	(session, args) => {
+		const city = args.intent.entities[0].entity;
+		const geocodeUrl = `http://maps.googleapis.com/maps/api/geocode/json?address=${city}`;
+		axios.get(geocodeUrl)
+			.then((response) => {
+				if (response.data.status === 'ZERO_RESULTS') {
+					throw new Error('unable to find the address');
+				}
+				let lat = response.data.results[0].geometry.location.lat;
+				let lng = response.data.results[0].geometry.location.lng;
+				const weatherUrl = `https://api.darksky.net/forecast/338f91d839d33c71c80184854527c2eb/${lat},${lng}`;
+				session.send(`Location: ${response.data.results[0].formatted_address}`);
+				return axios.get(weatherUrl);
+			})
+			.then((response) => {
+				// console.log(JSON.stringify({
+				//     temperature: response.data.currently.temperature,
+				//     feelsLike: response.data.currently.apparentTemperature
+				// }, '', 4));
+				session.send(`Temperature is ${response.data.currently.temperature} but 
+                                feels like ${response.data.currently.apparentTemperature}`);
+			})
+			.catch((e) => {
+				if (e.code === 'ENOTFOUND') {
+					session.send('unable to connect to the API servers');
+				} else {
+					console.log(e.message);
+				}
+			});
+		session.endDialog();
+	}).triggerAction({
+	matches: 'Weather.GetForecast'
 });
 
 bot.dialog('CancelDialog',
-    (session) => {
-        session.send('You reached the Cancel intent. You said \'%s\'.', session.message.text);
-        session.endDialog();
-    }
+	(session) => {
+		session.send('You reached the Cancel intent. You said \'%s\'.', session.message.text);
+		session.endDialog();
+	}
 ).triggerAction({
-    matches: 'Cancel'
+	matches: 'Cancel'
 });
