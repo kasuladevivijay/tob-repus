@@ -74,7 +74,7 @@ bot.dialog('HelpDialog',
 
 bot.dialog('WeatherDialog', 
     (session) => {
-        session.send('You asked about Weather', session.message.text);
+        session.send('You asked about Weather \'%s\'.', session.message.text);
         session.endDialog();
 }).triggerAction({
     matches: 'Weather.GetForecast'
