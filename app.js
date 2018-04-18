@@ -126,9 +126,8 @@ bot.dialog('CancelDialog',
 //  Currency Conversion; Base currency - USD
 
 bot.dialog('CurrencyDialog', (session, args) => {
-	session.send(`Currency Conversion: ${args}`);
+	session.send('Currency Conversion: %s', args);
 	session.endDialog();
-})
-	.triggerAction({
-		matches: 'Currency.Exchange'
-	});
+}).triggerAction({
+	matches: 'Currency.Exchange'
+});
