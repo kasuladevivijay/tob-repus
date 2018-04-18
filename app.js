@@ -39,7 +39,7 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({
 // This default message handler is invoked if the user's utterance doesn't
 // match any intents handled by other dialogs.
 var bot = new builder.UniversalBot(connector, function (session, args) {
-	session.send('You reached the default message handler. You said \'%s\'.', session.message.text);
+	session.send('You reached the default message handler. You said \'%s\' %s.', session.message.text, args);
 });
 
 bot.set('storage', tableStorage);
@@ -128,7 +128,7 @@ bot.dialog('CancelDialog',
 //  Currency Conversion; Base currency - USD
 
 bot.dialog('CurrencyDialog', (session, args) => {
-	session.send('Currency Conversion: %s', args);
+	session.send('You said \'%s\' %s.', session.message.text, args);
 	session.endDialog();
 }).triggerAction({
 	matches: 'Currency.Exchange'
