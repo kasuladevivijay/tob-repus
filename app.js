@@ -72,6 +72,14 @@ bot.dialog('HelpDialog',
     matches: 'Help'
 })
 
+bot.dialog('WeatherDialog', 
+    (session) => {
+        session.send('You asked about Weather', session.message.text);
+        session.endDialog();
+}).triggerAction({
+    matches: 'Weather.GetForecast'
+})
+
 bot.dialog('CancelDialog',
     (session) => {
         session.send('You reached the Cancel intent. You said \'%s\'.', session.message.text);
