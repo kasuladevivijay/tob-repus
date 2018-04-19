@@ -62,8 +62,8 @@ bot.recognizer(recognizer);
 
 
 bot.dialog('GreetingDialog',
-	(session) => {
-		session.send('You reached the Greeting intent. You said \'%s\'.', session.message.text);
+	(session, args) => {
+		session.send('You reached the Greeting intent. You said \'%s\' %s.', session.message.text, JSON.stringify(args, '', 4));
 		session.endDialog();
 	}
 ).triggerAction({
