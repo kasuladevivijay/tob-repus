@@ -151,7 +151,7 @@ bot.dialog('CurrencyDialog', (session, args) => {
 		.then((response) => {
 			session.send(`base currency: ${response.data.base}`);
 			session.send(`conversion to ${entities[0]} = 
-                        ${response.data.rates[`${entities[0]}`]} * ${response.data.rates[`${entities[1]}`]}`);
+                        ${response.data.rates[`${entities[0]}`] * response.data.rates[`${entities[1]}`]}`);
 		})
 		.catch((error) => {
 			session.send('Error: %s', error);
