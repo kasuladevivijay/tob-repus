@@ -150,8 +150,8 @@ bot.dialog('CurrencyDialog', (session, args) => {
 	axios.get(url)
 		.then((response) => {
 			session.send(`base currency: ${response.data.base}`);
-			session.send(entities[0], entities[1]);
-			session.send('USD to '+ _.toUpper(entities[0])+' = '+ response.data.rates[toString(entities[0])] * (entities[1] ? entities[1] :1));
+			session.send(entities);
+			session.send('USD to '+ _.toUpper(entities[0])+' = '+ response.data.rates[toString(entities[0])] * entities[1] ? entities[1] :1);
 		})
 		.catch((error) => {
 			session.send('Error: %s', error);
