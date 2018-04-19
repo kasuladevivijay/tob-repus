@@ -6,6 +6,7 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var botbuilder_azure = require('botbuilder-azure');
 var axios = require('axios');
+var _ = require('lodash');
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -143,7 +144,17 @@ bot.dialog('CancelDialog',
 //  Currency Conversion; Base currency - USD
 
 bot.dialog('CurrencyDialog', (session, args) => {
-	session.send('You said \'%s\' %s.', session.message.text, JSON.stringify(args, '', 2));
+	const currency = _.toUpper(args.intent.entities[0].entity);
+	const url = 'https://openexchangerates.org/api/latest.json?app_id=c689abf9777f49b7a583a0abaef42628';
+	axios.get(url)
+		.then((response) => {
+			session.send(`base currency: ${response.data.base}`);
+			session.send(`conversion to ${currency} = ${response.data.rates.INR}`);
+		})
+		.catch((error) => {
+			session.send('Error: %s', error);
+		});
+	// session.send('You said \'%s\' %s.', session.message.text, JSON.stringify(args, '', 2));
 	session.endDialog();
 }).triggerAction({
 	matches: 'Currency.Exchange'
