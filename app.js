@@ -149,7 +149,7 @@ bot.dialog('CurrencyDialog', (session, args) => {
 	axios.get(url)
 		.then((response) => {
 			session.send(`base currency: ${response.data.base}`);
-			session.send(`conversion to ${currency} = ${response.data.rates.INR}`);
+			session.send(`conversion to ${currency} = ${response.data.rates[`+${currency}+`]}`);
 		})
 		.catch((error) => {
 			session.send('Error: %s', error);
