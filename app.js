@@ -77,7 +77,7 @@ bot.dialog('GreetingDialog',
 			}
 		}
 		else {
-			session.send('%s', session.message.text);
+			session.send('you said: %s', session.message.text);
 		}
 		session.endDialog();
 	}
@@ -143,7 +143,7 @@ bot.dialog('CancelDialog',
 //  Currency Conversion; Base currency - USD
 
 bot.dialog('CurrencyDialog', (session, args) => {
-	session.send('You said \'%s\' %s.', session.message.text, args);
+	session.send('You said \'%s\' %s.', session.message.text, JSON.stringify(args, '', 2));
 	session.endDialog();
 }).triggerAction({
 	matches: 'Currency.Exchange'
