@@ -68,13 +68,13 @@ bot.dialog('GreetingDialog',
 		const date = new Date();
 		if(time) {
 			if(date.getHours()+5 < 12 ) {
-				session.send(`Its ${date}, Good Morning`);
+				session.send('Good Morning');
 			}else if(12 <= date.getHours()+5 <= 16 ){
-				session.send(`Its ${date}, Good Afternoon`);
+				session.send('Good Afternoon');
 			}else if(16 <= date.getHours()+5 <= 20) {
-				session.send(`Its ${date}, Good Evening`);
+				session.send('Good Evening');
 			}else {
-				session.send(`Its ${date}, Good Night`);
+				session.send('Good Night');
 			}
 		}
 		else {
@@ -144,12 +144,14 @@ bot.dialog('CancelDialog',
 //  Currency Conversion; Base currency - USD
 
 bot.dialog('CurrencyDialog', (session, args) => {
-	const currency = _.toUpper(args.intent.entities[0].entity);
+	// const currency = _.toUpper(args.intent.entities[0].entity);
+	const entities = _.map(args.intent.entities, 'entity');
 	const url = 'https://openexchangerates.org/api/latest.json?app_id=c689abf9777f49b7a583a0abaef42628';
 	axios.get(url)
 		.then((response) => {
 			session.send(`base currency: ${response.data.base}`);
-			session.send(`conversion to ${currency} = ${response.data.rates[`${currency}`]}`);
+			session.send(`conversion to ${entities[0]} = 
+                        ${response.data.rates[`${entities[0]}`]} * ${response.data.rates[`${entities[1]}`]}`);
 		})
 		.catch((error) => {
 			session.send('Error: %s', error);
