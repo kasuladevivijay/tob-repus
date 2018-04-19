@@ -65,13 +65,13 @@ bot.dialog('GreetingDialog',
 	(session, args) => {
 		let time = args.intent.entities[0].entity;
 		const date = new Date();
-		let now = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+		let now = `${date.getHours()+5.30}:${date.getMinutes()}:${date.getSeconds()}`;
 		if(time) {
-			if(0 < date.getHours() < 12 ) {
+			if(0 < date.getHours()+5.30 < 12 ) {
 				session.send(`Time is now ${now}, Good Morning`);
-			}else if(12 < date.getHours() < 16 ){
+			}else if(12 < date.getHours()+5.30 < 16 ){
 				session.send(`Time is now ${now}, Good Afternoon`);
-			}else if(16 < date.getHours() < 20) {
+			}else if(16 < date.getHours()+5.30 < 20) {
 				session.send(`Time is now ${now}, Good Evening`);
 			}else {
 				session.send(`Time is now ${now}, Good Night`);
