@@ -65,7 +65,7 @@ bot.dialog('GreetingDialog',
 	(session, args) => {
 		let time = args.intent.entities[0].entity;
 		const date = new Date();
-		let now = `${date.getHours()+5}:${date.getMinutes()+30}:${date.getSeconds()}`;
+		let now = `${date.getHours()+5}:${date.getMinutes()}:${date.getSeconds()}`;
 		if(time) {
 			if(0 < date.getHours()+5 < 12 ) {
 				session.send(`Time is now ${now}, Good Morning`);
@@ -76,11 +76,9 @@ bot.dialog('GreetingDialog',
 			}else {
 				session.send(`Time is now ${now}, Good Night`);
 			}
-		}else if(session.message.text === 'hi'){
-			session.send('Yo!');
 		}
 		else {
-			session.send(`You said ${session.message.text}`);
+			session.send('%s', session.message.text);
 		}
 		session.endDialog();
 	}
@@ -90,7 +88,7 @@ bot.dialog('GreetingDialog',
 
 bot.dialog('HelpDialog',
 	(session) => {
-		session.send('You reached the Help intent. You said \'%s\'.', session.message.text);
+		session.send('You asked \'%s\'.', session.message.text);
 		session.endDialog();
 	}
 ).triggerAction({
@@ -136,7 +134,7 @@ bot.dialog('WeatherDialog',
 
 bot.dialog('CancelDialog',
 	(session) => {
-		session.send('You reached the Cancel intent. You said \'%s\'.', session.message.text);
+		session.send('You said \'%s\'.', session.message.text);
 		session.endDialog();
 	}
 ).triggerAction({
