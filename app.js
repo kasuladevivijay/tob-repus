@@ -76,8 +76,11 @@ bot.dialog('GreetingDialog',
 			}else {
 				session.send(`Time is now ${now}, Good Night`);
 			}
+		}else {
+			if(session.message.text === 'hi' || session.message.text === 'hello'){
+				session.send('Yo!');
+			}
 		}
-		// session.send('You reached the Greeting intent. You said \'%s\' %s.', session.message.text, JSON.stringify(args, '', 4));
 		session.endDialog();
 	}
 ).triggerAction({
